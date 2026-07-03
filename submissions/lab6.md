@@ -28,6 +28,7 @@ The local Checkov JSON output had `severity: null` for every built-in Terraform 
 | CKV_AWS_382 | 3 | Blocks security groups that allow unrestricted egress to `0.0.0.0/0` on all ports/protocols. |
 
 ### Pulumi scan
+Pulumi was scanned with KICS against `labs/lab6/vulnerable-iac/pulumi`, because this lab uses KICS for native Pulumi source support. KICS found 6 Pulumi findings across public database exposure, DynamoDB encryption/recovery, EC2 monitoring, and EC2 optimization.
 
 | Severity | Count |
 |----------|------:|
