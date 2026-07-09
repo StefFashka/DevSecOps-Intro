@@ -32,9 +32,10 @@ JSON alert from Falco logs (paste the most relevant lines):
   condition: >
     container.id != host and
     (
-      (evt.type in (connect, accept, listen, bind) and
+      (evt.type=connect and
        (fd.sport in (3333, 4444, 5555, 7777, 14444, 19999, 45700) or
-        fd.rport in (3333, 4444, 5555, 7777, 14444, 19999, 45700))) or
+        fd.rport in (3333, 4444, 5555, 7777, 14444, 19999, 45700) or
+        evt.args contains "3333")) or
       (evt.type in (execve, execveat) and proc.name in (xmrig, ethminer, cgminer, t-rex, claymore)) or
       (evt.type in (execve, execveat) and proc.name=nc and proc.cmdline contains "3333")
     )
@@ -161,9 +162,10 @@ CI-time Conftest fails unsafe manifests during PR review, when the fix is cheap 
   condition: >
     container.id != host and
     (
-      (evt.type in (connect, accept, listen, bind) and
+      (evt.type=connect and
        (fd.sport in (3333, 4444, 5555, 7777, 14444, 19999, 45700) or
-        fd.rport in (3333, 4444, 5555, 7777, 14444, 19999, 45700))) or
+        fd.rport in (3333, 4444, 5555, 7777, 14444, 19999, 45700) or
+        evt.args contains "3333")) or
       (evt.type in (execve, execveat) and proc.name in (xmrig, ethminer, cgminer, t-rex, claymore)) or
       (evt.type in (execve, execveat) and proc.name=nc and proc.cmdline contains "3333")
     )
@@ -177,8 +179,8 @@ CI-time Conftest fails unsafe manifests during PR review, when the fix is cheap 
 
 ### Triggered alert
 ```json
-{"hostname":"26a76fe9ed28","output":"2026-07-02T14:42:31.490872428+0000: Critical Possible Cryptominer Activity (container=lab9-target process=nc evt=bind cmdline=nc -l -p 3333 target=:::3333 sport=3333 rport=<NA>) container_id=999a8400ecae container_name=lab9-target container_image_repository=alpine container_image_tag=3.20 k8s_pod_name=<NA> k8s_ns_name=<NA>","output_fields":{"container.id":"999a8400ecae","container.image.repository":"alpine","container.image.tag":"3.20","container.name":"lab9-target","evt.time.iso8601":1783003351490872428,"evt.type":"bind","fd.name":":::3333","fd.rport":null,"fd.sport":3333,"k8s.ns.name":null,"k8s.pod.name":null,"proc.cmdline":"nc -l -p 3333","proc.name":"nc"},"priority":"Critical","rule":"Possible Cryptominer Activity","source":"syscall","tags":["container","mitre_command_and_control","mitre_execution"],"time":"2026-07-02T14:42:31.490872428Z"}
+{"hostname":"26a76fe9ed28","output":"2026-07-02T14:42:32.611584608+0000: Critical Possible Cryptominer Activity (container=lab9-target process=nc evt=execve cmdline=nc -w 2 127.0.0.1 3333 target=<NA> sport=<NA> rport=<NA>) container_id=999a8400ecae container_name=lab9-target container_image_repository=alpine container_image_tag=3.20 k8s_pod_name=<NA> k8s_ns_name=<NA>","output_fields":{"container.id":"999a8400ecae","container.image.repository":"alpine","container.image.tag":"3.20","container.name":"lab9-target","evt.time.iso8601":1783003352611584608,"evt.type":"execve","fd.name":null,"fd.rport":null,"fd.sport":null,"k8s.ns.name":null,"k8s.pod.name":null,"proc.cmdline":"nc -w 2 127.0.0.1 3333","proc.name":"nc"},"priority":"Critical","rule":"Possible Cryptominer Activity","source":"syscall","tags":["container","mitre_command_and_control","mitre_execution"],"time":"2026-07-02T14:42:32.611584608Z"}
 ```
 
 ### Reflection (2-3 sentences)
-I used mining-pool ports and known miner process names because they are simple, high-signal runtime indicators; the `nc ... 3333` branch is only for this lab simulation. This misses miners hidden behind HTTPS, renamed binaries, or private pools on normal ports. In the Lecture 9 SLA matrix, this CRITICAL alert should page the owner immediately and open a 24-hour remediation path with evidence attached.
+I used mining-pool ports and known miner process names because they are simple, high-signal runtime indicators. The `nc ... 3333` clause is included only to make the lab simulation deterministic; this still misses miners hidden behind HTTPS, renamed binaries, or private pools on normal ports. In the Lecture 9 SLA matrix, this CRITICAL alert should page the owner immediately and open a 24-hour remediation path with evidence attached.

@@ -15,9 +15,10 @@
   condition: >
     container.id != host and
     (
-      (evt.type in (connect, accept, listen, bind) and
+      (evt.type=connect and
        (fd.sport in (3333, 4444, 5555, 7777, 14444, 19999, 45700) or
-        fd.rport in (3333, 4444, 5555, 7777, 14444, 19999, 45700))) or
+        fd.rport in (3333, 4444, 5555, 7777, 14444, 19999, 45700) or
+        evt.args contains "3333")) or
       (evt.type in (execve, execveat) and proc.name in (xmrig, ethminer, cgminer, t-rex, claymore)) or
       (evt.type in (execve, execveat) and proc.name=nc and proc.cmdline contains "3333")
     )
