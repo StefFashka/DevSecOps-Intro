@@ -49,6 +49,8 @@ Mean Time to Remediate (MTTR) on closed-this-period findings is N/A because 0 fi
 | High | 121 |
 | Medium | 173 |
 | Low | 31 |
+| Info | 12 |
+| **Total** | 350 |
 
 ### Findings by source tool
 | Tool | Active | Mitigated | False Positive | Risk Accepted |

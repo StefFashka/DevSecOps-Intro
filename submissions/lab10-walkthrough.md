@@ -2,25 +2,25 @@
 
 ## (0:00-0:30) Context
 I built a DevSecOps program around OWASP Juice Shop as the target application.
-The scope covered SBOM generation, SCA, SAST, DAST, IaC scanning, container and Kubernetes scanning, image signing evidence, runtime alert evidence, and DefectDojo governance.
+The scope covered Syft, Grype, Trivy, Semgrep, ZAP, Checkov, KICS, Cosign, Falco, Conftest, and DefectDojo for signed, scanned, verified, deployed, and governed evidence.
 
 ## (0:30-2:00) Layers
-Pre-commit controls covered secret prevention and signed development workflow evidence.
-At build time I generated a CycloneDX SBOM with Syft, scanned it with Grype, and compared it against Trivy image output.
-For application testing I used Semgrep for SAST and ZAP authenticated scanning for DAST.
-For pre-deploy security I scanned Terraform with Checkov and Ansible/Pulumi with KICS, then deployed a digest-pinned Kubernetes manifest with restricted Pod Security Standards, a dedicated service account, read-only root filesystem, dropped capabilities, and NetworkPolicy.
-For runtime and policy evidence I retained Falco and Conftest lab artifacts, then used DefectDojo as the program layer for aggregation, deduplication, SLA tracking, and governance metrics.
+- Pre-commit: gitleaks for secret prevention and SSH-signed commits for workflow integrity.
+- Build: SBOM with Syft, SCA with Grype, Trivy image comparison, and SAST with Semgrep.
+- Pre-deploy: Checkov on Terraform IaC, KICS on Ansible/Pulumi, Cosign signing evidence, and Conftest policy gate evidence.
+- Runtime: Falco eBPF detection evidence from runtime alerts.
+- Program: DefectDojo aggregation, deduplication, SLA matrix, MTTR, vulnerability age, backlog, and SLA compliance metrics.
 
 ## (2:00-3:00) Findings + Closures
-We imported 403 raw findings and reduced that to 351 unique findings after deduplication.
-The strongest cross-tool duplicate was GHSA-5mrr-rgp6-x4gr in `marsdb` 0.6.11, reported by Grype, Trivy, and the Trivy image scan, then retained as DefectDojo finding 107.
-One accepted risk was GHSA-pxg6-pf52-xh8x in `cookie` 0.4.2, accepted only until 2026-10-06 because it is Low severity and belongs in the dependency upgrade batch.
+- We imported 403 raw findings and reduced that to 351 unique findings after deduplication.
+- The strongest cross-tool duplicate was GHSA-5mrr-rgp6-x4gr in `marsdb` 0.6.11, reported by Grype, Trivy, and the Trivy image scan, then retained as DefectDojo finding 107.
+- One accepted risk was GHSA-pxg6-pf52-xh8x in `cookie` 0.4.2, accepted only until 2026-10-06 because it is Low severity and belongs in the dependency upgrade batch.
 
 ## (3:00-4:00) Metrics
-The program has 350 active open findings: 13 Critical, 121 High, 173 Medium, and 31 Low.
-MTTR is not yet measurable because no findings were mitigated in this capstone run; compared to DORA Elite MTTR under 1 hour, this is the clearest process gap.
-The median open vulnerability age is 0 days because the DefectDojo import was done in one run, and current SLA compliance is 96.6%.
-The backlog trend is rising from baseline 0 to 350 open findings, which is expected for first centralization but must fall next quarter.
+- The program has 350 active open findings: 13 Critical, 121 High, 173 Medium, 31 Low, and 12 Info.
+- MTTR is not yet measurable because no findings were mitigated during this capstone. Establishing a measurable remediation process is the primary improvement area.
+- The median open vulnerability age is 0 days because the DefectDojo import was done in one run, and current SLA compliance is 96.6%.
+- The backlog trend is rising from baseline 0 to 350 open findings, which is expected for first centralization but must fall next quarter.
 
 ## (4:00-4:30) Next Steps
 If I had another quarter, I would mature OWASP SAMM Defect Management from Initial to Defined.
