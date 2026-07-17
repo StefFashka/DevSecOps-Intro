@@ -8,7 +8,7 @@
 - containerd version: Docker Desktop reports containerd `v2.2.4` (`193637f7ee8ae5f5aa5248f49e7baa3e6164966e`). Direct `containerd --version` and `nerdctl` were unavailable in WSL.
 
 ### Kata installation
-- Kata version: NOT INSTALLED. This host is Windows + WSL2/Docker Desktop, and `/dev/kvm` is absent in both WSL and privileged Docker containers.
+- Kata version: NOT INSTALLED. Kata did not start because `/dev/kvm` was not exposed in WSL2 during the lab run, so the KVM-backed Kata runtime could not boot its micro-VM.
 - containerd config snippet:
 ```toml
 # NOT CONFIGURED ON THIS HOST
