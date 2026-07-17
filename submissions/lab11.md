@@ -110,6 +110,8 @@ Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsa
 | 429 | 54 |
 | 5xx | 6 |
 
+Note: the first 6 requests reached Juice Shop but returned 5xx because the login request body was intentionally empty; the remaining 54 requests were blocked by Nginx rate limiting with HTTP 429.
+
 ### Timeout enforced
 ```
 Connecting to 192.168.65.254
@@ -123,8 +125,8 @@ verify return:1
 
 ### Cipher hardening
 ```
-Peer Temp Key: X25519, 253 bits
-New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+Server Temp Key: X25519, 253 bits
+Cipher: TLS_AES_256_GCM_SHA384
 ```
 
 ### Cert rotation runbook (7 steps)
